@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Controle Financeiro</title>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <style>
+        :root {
+            --bg-bege: #e8e4d9;
+            --texto-escuro: #1a1a1a;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: var(--bg-bege);
+            margin: 0; padding: 0;
+            display: flex; justify-content: center; align-items: center;
+            height: 100vh;
+        }
+        .login-box {
+            background-color: #d1d3d4;
+            padding: 40px 30px;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            width: 100%; max-width: 320px;
+        }
+        h2 { color: var(--texto-escuro); margin-bottom: 5px; }
+        p { color: var(--texto-escuro); font-size: 14px; margin-bottom: 30px; }
+        .erro-login { color: red; margin-top: 15px; font-weight: bold; display: none; font-size: 13px; }
+    </style>
+</head>
+<body>
+
+    <div class="login-box">
+        <h2>Financeiro</h2>
+        <p>Acesso Restrito</p>
+        
+        <!-- Botão do Google -->
+        <div id="g_id_onload"
+             data-client_id="658417283494-ambefq1hhu62t38s2lsjme98h795hkms.apps.googleusercontent.com"
+             data-callback="tratarLoginGoogle"
+             data-auto_prompt="false">
+        </div>
+        <div class="g_id_signin" data-type="standard" data-theme="outline" data-size="large"></div>
+        
+        <p id="msg-erro" class="erro-login">Acesso Negado.<br>Você não é o dono deste aplicativo.</p>
+    </div>
+
+    <script>
+        function tratarLoginGoogle(response) {
+            const base64Url = response.credential.split('.')[1];
+            const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+            const dadosUsuario = JSON.parse(decodeURIComponent(window.atob(base64).split('').map(function(c) {
+                return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+            }).join('')));
+
+            const email = dadosUsuario.email;
+
+            // MUDAR AQUI: Coloque o seu e-mail do Google
+            if (email === "paulo8448@gmail.com") {
+                // Salva uma "chave" no navegador indicando que está logado
+                localStorage.setItem("autenticado", "true");
+                // Redireciona para o painel principal
+                window.location.href = "index.html";
+            } else {
+                document.getElementById('msg-erro').style.display = 'block';
+            }
+        }
+    </script>
+</body>
+</html>

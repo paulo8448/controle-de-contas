@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Controle de Contas</title>
+    <link rel="stylesheet" href="index.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- HEADER (Com o calendário clicável) -->
+        <div class="header">
+            <span id="btn-sair" style="cursor: pointer;" title="Sair">🚪</span>
+            <div style="display: flex; align-items: center; gap: 10px; user-select: none;">
+                <span id="btn-mes-ant" style="cursor: pointer; font-size: 1.2rem; padding: 0 5px;">〈</span>
+                <span id="mes-titulo" style="min-width: 130px; text-align: center; text-transform: lowercase; cursor: pointer; border-radius: 6px; padding: 2px 8px; transition: background-color 0.2s;">
+                    carregando...
+                </span>
+                <span id="btn-mes-prox" style="cursor: pointer; font-size: 1.2rem; padding: 0 5px;">〉</span>
+            </div>
+            <span id="btn-alternar-modo" style="cursor: pointer; font-size: 1.2rem;" title="Selecionar Itens">📋</span>
+        </div>
+
+        <div class="card">
+            <div class="colunas-titulo">
+                <span>nome</span> <span>valor</span> <span id="titulo-coluna-3">parcelas</span> <span style="text-align: right;" id="titulo-coluna-4">pago</span>
+            </div>
+            <div id="lista-contas"></div>
+        </div>
+
+<div class="footer-inferior">
+            <div class="visor-total">
+                <span class="visor-label" id="label-visor">Total em Dívidas</span>
+                <span id="txt-total-geral" class="visor-valor">R$ 0,00</span>
+            </div>
+
+<!-- CAIXA DE PRÉVIA DO PRÓXIMO MÊS -->
+            <div class="visor-previa">
+                <span class="visor-label" id="txt-titulo-previa">prévia de dezembro</span>
+                <div id="lista-previa-proximo-mes" style="font-size: 0.9rem; margin: 8px 0; color: var(--texto-escuro); max-height: 120px; overflow-y: auto;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 4px; opacity: 0.7;">
+                        <span>Carregando...</span>
+                    </div>
+                </div>
+                <div style="border-top: 1px solid rgba(0,0,0,0.1); margin-top: 8px; padding-top: 6px; display: flex; justify-content: space-between; font-weight: bold; font-size: 0.95rem;">
+                    <span id="txt-label-total-previa">Total Dezembro</span>
+                    <span id="txt-total-previa">R$ 0,00</span>
+                </div>
+            </div>
+
+            <button class="btn-acao-principal" id="btn-acao-inferior">+</button>
+        </div>
+
+        <div id="modal-loading" class="modal">
+            <div class="loading-caixa">
+                <div class="spinner"></div>
+                <span id="loading-mensagem" class="loading-texto">Atualizando dados...</span>
+            </div>
+        </div>
+
+        <div id="modal-calendario" class="modal-calendario-overlay">
+            <div id="popup-calendario" class="popup-calendario-conteudo">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; font-weight: bold; color: var(--texto-escuro);">
+                    <button id="btn-ano-ant" style="background: none; border: none; font-size: 1.3rem; cursor: pointer; padding: 5px; color: var(--texto-escuro);">〈</button>
+                    <span id="titulo-ano-popup" style="cursor: pointer; padding: 4px 12px; border-radius: 6px; transition: background-color 0.2s; font-size: 1.1rem; border: 1px solid rgba(0,0,0,0.1);"></span>
+                    <button id="btn-ano-prox" style="background: none; border: none; font-size: 1.3rem; cursor: pointer; padding: 5px; color: var(--texto-escuro);">〉</button>
+                </div>
+                <div id="grelha-meses" class="grid-calendario animacao-transicao"></div>
+                <div id="grelha-anos" class="grid-calendario animacao-transicao" style="display: none;"></div>
+                <button id="btn-fechar-calendario" style="margin-top: 15px; background: none; border: none; font-size: 0.9rem; font-weight: bold; cursor: pointer; color: #555; text-decoration: underline;">fechar</button>
+            </div>
+        </div>
+
+        <!-- O SEU MODAL DE DÍVIDAS AGORA FICA AQUI DIRETAMENTE -->
+        <div id="modal-form-divida" class="modal">
+            <div class="modal-conteudo">
+                <button id="btn-fechar-form-divida" class="btn-fechar">✖</button>
+                <h3 id="modal-titulo-divida" style="margin-top: 5px;">Nova Dívida</h3>
+                <input type="hidden" id="edit-id" value="">
+                
+                <div class="form-group"><label>Descrição</label><input type="text" id="input-descricao"></div>
+                <div class="form-group"><label>Valor (R$)</label><input type="number" id="input-valor" step="0.01"></div>
+                
+                <div class="form-group">
+                    <label>Mês e Ano da Dívida (Gire a roda do rato)</label>
+                    <div style="display: flex; gap: 10px;">
+                        <select id="select-mes" title="Gire a rodinha para mudar o mês" style="flex: 2; padding: 12px; border: 2px solid var(--texto-escuro); border-radius: 8px; background-color: var(--card-azul-cinza); font-size: 16px; font-weight: bold; text-align: center; cursor: ns-resize;">
+                            <option value="01">Janeiro</option><option value="02">Fevereiro</option><option value="03">Março</option>
+                            <option value="04">Abril</option><option value="05">Maio</option><option value="06">Junho</option>
+                            <option value="07">Julho</option><option value="08">Agosto</option><option value="09">Setembro</option>
+                            <option value="10">Outubro</option><option value="11">Novembro</option><option value="12">Dezembro</option>
+                        </select>
+                        <select id="select-ano" title="Gire a rodinha para mudar o ano" style="flex: 1; padding: 12px; border: 2px solid var(--texto-escuro); border-radius: 8px; background-color: var(--card-azul-cinza); font-size: 16px; font-weight: bold; text-align: center; cursor: ns-resize;">
+                            <option value="2024">2024</option><option value="2025">2025</option><option value="2026">2026</option>
+                            <option value="2027">2027</option><option value="2028">2028</option><option value="2029">2029</option>
+                            <option value="2030">2030</option><option value="2031">2031</option><option value="2032">2032</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group" style="text-align: center;">
+                    <label>Total de Parcelas</label>
+                    <div style="display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 5px;">
+                        <button type="button" id="btn-diminuir-parcela" style="width: 40px; height: 40px; border-radius: 8px; border: 2px solid var(--texto-escuro); background-color: var(--card-azul-cinza); font-size: 20px; font-weight: bold; cursor: pointer; color: var(--texto-escuro); display: flex; justify-content: center; align-items: center;">-</button>
+                        <input type="number" id="input-parcelas" value="1" min="1" style="width: 80px; text-align: center; padding: 10px; border: 2px solid var(--texto-escuro); border-radius: 8px; background-color: var(--card-azul-cinza); font-size: 18px; font-weight: bold; outline: none; -moz-appearance: textfield;">
+                        <button type="button" id="btn-aumentar-parcela" style="width: 40px; height: 40px; border-radius: 8px; border: 2px solid var(--texto-escuro); background-color: var(--card-azul-cinza); font-size: 20px; font-weight: bold; cursor: pointer; color: var(--texto-escuro); display: flex; justify-content: center; align-items: center;">+</button>
+                    </div>
+                </div>
+
+                <button class="btn-opcao" id="btn-salvar-divida" style="background-color: var(--header-cinza); margin-top: 20px;">Salvar Conta</button>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="selecao.js"></script>
+    <script src="index.js"></script>
+</body>
+</html>

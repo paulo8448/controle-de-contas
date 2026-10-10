@@ -1,0 +1,63 @@
+<!-- MODAL DE FORMULÁRIO (CRIAR / EDITAR DÍVIDA) -->
+<div id="modal-form-divida" class="modal">
+    <div class="modal-conteudo">
+        <button id="btn-fechar-form-divida" class="btn-fechar">✖</button>
+        <h3 id="modal-titulo-divida" style="margin-top: 5px;">Nova Dívida</h3>
+        <input type="hidden" id="edit-id" value="">
+        
+        <div class="form-group"><label>Descrição</label><input type="text" id="input-descricao"></div>
+        <div class="form-group"><label>Valor (R$)</label><input type="number" id="input-valor" step="0.01"></div>
+        
+        <div class="form-group">
+            <label>Mês e Ano da Dívida (Gire a roda do rato por cima)</label>
+            <div style="display: flex; gap: 10px;">
+                <select id="select-mes" title="Gire a rodinha para mudar o mês" style="flex: 2; padding: 12px; border: 2px solid var(--texto-escuro); border-radius: 8px; background-color: var(--card-azul-cinza); font-size: 16px; font-weight: bold; text-align: center; cursor: ns-resize;">
+                    <option value="01">Janeiro</option>
+                    <option value="02">Fevereiro</option>
+                    <option value="03">Março</option>
+                    <option value="04">Abril</option>
+                    <option value="05">Maio</option>
+                    <option value="06">Junho</option>
+                    <option value="07">Julho</option>
+                    <option value="08">Agosto</option>
+                    <option value="09">Setembro</option>
+                    <option value="10">Outubro</option>
+                    <option value="11">Novembro</option>
+                    <option value="12">Dezembro</option>
+                </select>
+                <select id="select-ano" title="Gire a rodinha para mudar o ano" style="flex: 1; padding: 12px; border: 2px solid var(--texto-escuro); border-radius: 8px; background-color: var(--card-azul-cinza); font-size: 16px; font-weight: bold; text-align: center; cursor: ns-resize;">
+                    <option value="2024">2024</option>
+                    <option value="2025">2025</option>
+                    <option value="2026">2026</option>
+                    <option value="2027">2027</option>
+                    <option value="2028">2028</option>
+                    <option value="2029">2029</option>
+                    <option value="2030">2030</option>
+                    <option value="2031">2031</option>
+                    <option value="2032">2032</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group" style="text-align: center;">
+            <label>Total de Parcelas</label>
+            <div style="display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 5px;">
+                <button type="button" id="btn-diminuir-parcela" style="width: 40px; height: 40px; border-radius: 8px; border: 2px solid var(--texto-escuro); background-color: var(--card-azul-cinza); font-size: 20px; font-weight: bold; cursor: pointer; color: var(--texto-escuro); display: flex; justify-content: center; align-items: center;">-</button>
+                <input type="number" id="input-parcelas" value="1" min="1" style="width: 80px; text-align: center; padding: 10px; border: 2px solid var(--texto-escuro); border-radius: 8px; background-color: var(--card-azul-cinza); font-size: 18px; font-weight: bold; outline: none; -moz-appearance: textfield;">
+                <button type="button" id="btn-aumentar-parcela" style="width: 40px; height: 40px; border-radius: 8px; border: 2px solid var(--texto-escuro); background-color: var(--card-azul-cinza); font-size: 20px; font-weight: bold; cursor: pointer; color: var(--texto-escuro); display: flex; justify-content: center; align-items: center;">+</button>
+            </div>
+        </div>
+
+        <button class="btn-opcao" id="btn-salvar-divida" style="background-color: var(--header-cinza); margin-top: 20px;">Salvar Conta</button>
+    </div>
+</div>
+
+<!-- MODAL DE OPÇÕES (ADICIONAR) -->
+<div id="modal-opcoes" class="modal">
+    <div class="modal-conteudo">
+        <button id="btn-fechar-modal" class="btn-fechar">✖</button>
+        <h3 style="margin-top: 5px;">Novo Registro</h3>
+        <button class="btn-opcao" id="btn-divida">Adicionar Dívida</button>
+        <button class="btn-opcao" id="btn-salario">Adicionar Salário</button>
+    </div>
+</div>
