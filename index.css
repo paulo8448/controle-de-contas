@@ -127,21 +127,72 @@ body {
 .visor-label { font-size: 0.75rem; color: var(--texto-escuro); font-weight: bold; text-transform: uppercase; }
 .visor-valor { font-size: 1.2rem; color: var(--texto-escuro); font-weight: bold; }
 
-.btn-acao-principal { 
-    width: 50px; 
-    height: 50px; 
-    border-radius: 50%; 
-    border: 3px solid var(--texto-escuro); 
-    background-color: transparent; 
-    font-size: 26px; 
-    font-weight: bold; 
-    display: flex; 
-    justify-content: center; 
-    align-items: center; 
-    cursor: pointer; 
-    color: var(--texto-escuro); 
-    flex-shrink: 0; 
-    transition: background-color 0.2s; 
+/* --- BOTÃO DE AÇÃO NO DESKTOP --- */
+.btn-acao-principal {
+    width: 100%;
+    box-sizing: border-box;
+    height: 55px; 
+    border-radius: 15px;
+    border: none;
+    background-color: var(--card-azul-cinza);
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    transition: transform 0.15s ease, background-color 0.15s ease;
+}
+
+.btn-acao-principal:hover {
+    transform: translateY(-2px);
+}
+
+/* Quando ESTÁ em MODO NORMAL (+ adicionar dívida) */
+.btn-acao-principal:not(.modo-excluir)::before {
+    content: "+";
+    font-size: 22px;
+    font-weight: bold;
+    color: var(--texto-escuro);
+    width: 28px;
+    height: 28px;
+    border: 2px solid var(--texto-escuro);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-bottom: 2px;
+}
+
+.btn-acao-principal:not(.modo-excluir)::after {
+    content: "adicionar dívida";
+    font-size: 1rem;
+    font-weight: bold;
+    color: var(--texto-escuro);
+}
+
+/* Quando ENTRA em MODO DE EXCLUSÃO (Fundo vermelho + Lixeira escuro + Excluir Dívida) */
+.btn-acao-principal.modo-excluir {
+    background-color: var(--vermelho-lixeira) !important;
+    color: var(--texto-escuro) !important;
+}
+
+/* Oculta os pseudo-elementos nativos para não encavalar com o JS */
+.btn-acao-principal.modo-excluir::before,
+.btn-acao-principal.modo-excluir::after {
+    display: none !important;
+    content: none !important;
+}
+
+/* Estilo do ícone SVG da lixeira (substitui o círculo do +) */
+.btn-acao-principal .icone-lixeira {
+    width: 28px;
+    height: 28px;
+    stroke: var(--texto-escuro); /* Mesma cor escura do + */
+    flex-shrink: 0;
 }
 
 .modo-excluir, .modo-lixeira { 
