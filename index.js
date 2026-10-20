@@ -4,7 +4,7 @@ if (localStorage.getItem("autenticado") !== "true") {
 }
 
 // Configurações Principais
-const URL_API = "https://script.google.com/macros/s/AKfycbyoAXxvXWn0G2GYIwICxNGEYf4kXcKbJovk-IXk__dTdrGtSFv2YKeHQyCSNj-25olS/exec";
+const URL_API = "https://script.google.com/macros/s/AKfycbz11tJcTC3PUO3C10jUn1j2IgGNog9dccl9DohOW3EoJdh1DB2WKGNLouQ0kCMnEUql/exec";
 let contasGlobais = [];
 let contasDoMes = []; 
 
