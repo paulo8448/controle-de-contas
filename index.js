@@ -203,26 +203,75 @@ function ativarEventosRodinhaMouse() {
     });
 }
 
-// BOTÕES INFERIORES
+// --- FUNÇÃO PARA ALTERAR A APARÊNCIA DO BOTÃO EM TEMPO REAL ---
+function atualizarInterfaceBotaoAcao() {
+    const checkboxesSelecionados = document.querySelectorAll('.checkbox-selecao:checked');
+    const qtdSelecionados = checkboxesSelecionados.length;
+    
+    // Procura por botões de ação tanto no mobile como no desktop
+    const botoesAcao = document.querySelectorAll('#btn-acao-inferior, #btn-adicionar, .btn-acao-principal');
+
+    botoesAcao.forEach(btn => {
+        if (!btn) return;
+
+        if (typeof obterModoSelecao === 'function' && obterModoSelecao()) {
+            if (qtdSelecionados > 0) {
+                // MODO EXCLUSÃO COM ITENS MARCADOS: Ícone de Lixeira + Texto
+                btn.innerHTML = `
+                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:8px; vertical-align:middle;">
+                        <polyline points="3 6 5 6 21 6"></polyline>
+                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                        <line x1="10" y1="11" x2="10" y2="17"></line>
+                        <line x1="14" y1="11" x2="14" y2="17"></line>
+                    </svg>
+                    <span>excluir selecionadas (${qtdSelecionados})</span>
+                `;
+                btn.classList.add('modo-excluir');
+            } else {
+                // MODO SELEÇÃO MAS NADA MARCADO
+                btn.innerHTML = `
+                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:8px; vertical-align:middle;">
+                        <polyline points="3 6 5 6 21 6"></polyline>
+                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                    </svg>
+                    <span>excluir dívida</span>
+                `;
+                btn.classList.add('modo-excluir');
+            }
+        } else {
+            // MODO PADRÃO: Adicionar Dívida
+            btn.innerHTML = `
+                <span style="font-size: 1.2em; font-weight: bold; margin-right: 6px;">+</span>
+                <span>adicionar dívida</span>
+            `;
+            btn.classList.remove('modo-excluir');
+        }
+    });
+}
+
+// BOTÕES INFERIORES / AÇÕES
 const btnAlternarModo = document.getElementById('btn-alternar-modo');
 const btnAcaoInferior = document.getElementById('btn-acao-inferior');
 
 if (btnAlternarModo) {
     btnAlternarModo.addEventListener('click', () => {
-        alternarModoSelecao(
-            btnAlternarModo, 
-            btnAcaoInferior, 
-            document.getElementById('label-visor'),
-            document.getElementById('titulo-coluna-3'),
-            document.getElementById('titulo-coluna-4'),
-            renderizarLista
-        );
+        if (typeof alternarModoSelecao === 'function') {
+            alternarModoSelecao(
+                btnAlternarModo, 
+                btnAcaoInferior, 
+                document.getElementById('label-visor'),
+                document.getElementById('titulo-coluna-3'),
+                document.getElementById('titulo-coluna-4'),
+                renderizarLista
+            );
+        }
+        atualizarInterfaceBotaoAcao();
     });
 }
 
 if (btnAcaoInferior) {
     btnAcaoInferior.addEventListener('click', () => {
-        if (obterModoSelecao()) {
+        if (typeof obterModoSelecao === 'function' && obterModoSelecao()) {
             executarExclusaoSelecionada(URL_API, mostrarLoading, esconderLoading, carregarDados);
         } else {
             abrirFormularioCriar();
@@ -347,7 +396,9 @@ function selecionarCheckbox(idConta) {
     const checkbox = document.getElementById('check-' + idConta);
     if (checkbox.checked) linha.classList.add('linha-selecionada');
     else linha.classList.remove('linha-selecionada');
+    
     atualizarSomaTotal();
+    atualizarInterfaceBotaoAcao(); // Atualiza a lixeira em tempo real
 }
 
 async function carregarDados(mensagem = "A carregar dados...") {
@@ -367,7 +418,7 @@ async function carregarDados(mensagem = "A carregar dados...") {
 function renderizarLista() {
     const listaHTML = document.getElementById('lista-contas');
     listaHTML.innerHTML = ''; 
-    let modoAtual = obterModoSelecao();
+    let modoAtual = (typeof obterModoSelecao === 'function') ? obterModoSelecao() : false;
     contasDoMes = [];
 
     let mesFormatado = String(mesVisualizacao).padStart(2, '0');
@@ -441,6 +492,7 @@ function renderizarLista() {
     });
 
     atualizarSomaTotal();
+    atualizarInterfaceBotaoAcao();
     
     if (typeof atualizarPreviaProximoMes === 'function') {
         atualizarPreviaProximoMes();
@@ -449,8 +501,9 @@ function renderizarLista() {
 
 function atualizarSomaTotal() {
     let soma = 0;
+    let modoAtual = (typeof obterModoSelecao === 'function') ? obterModoSelecao() : false;
 
-    if (obterModoSelecao()) {
+    if (modoAtual) {
         const checkboxesSelecionados = document.querySelectorAll('.checkbox-selecao:checked');
         checkboxesSelecionados.forEach(cb => {
             let valorNum = String(cb.getAttribute('data-valor')).replace(',', '.');
