@@ -1,3 +1,10 @@
+O teu código CSS tinha duplicidades (o bloco todo repetia-se duas vezes a meio da folha) e erros de sintaxe em regras de chaves/pseudo-elementos que partiam a renderização no desktop, além da regra para o Firefox que estava mal formulada (- { scrollbar-width... }).
+
+Também ajustei a regra do botão .btn-acao-principal.modo-excluir para que, ao entrar em modo de lixeira/exclusão, os pseudo-elementos ::before e ::after não fiquem sobrepostos com o conteúdo dinâmico inserido pelo JavaScript.
+
+Aqui tens o teu ficheiro CSS completo, limpo e corrigido:
+
+CSS
 :root {
     --bg-bege: #e8e4d9;
     --header-cinza: #d1d3d4;
@@ -7,38 +14,184 @@
     --verde-forte: #4caf50;
     --vermelho-lixeira: #e57373;
 }
-body { font-family: Arial, sans-serif; background-color: var(--bg-bege); margin: 0; padding: 0; display: flex; justify-content: center; }
-.app-container { width: 100%; max-width: 400px; height: 100vh; position: relative; background-color: var(--bg-bege); padding-top: 15px; overflow: hidden; }
-.header { background-color: var(--header-cinza); border-radius: 12px; margin: 0 15px; padding: 10px 15px; display: flex; justify-content: space-between; align-items: center; font-size: 1.3rem; color: var(--texto-escuro); font-weight: 500; }
-.card { background-color: var(--card-azul-cinza); border-radius: 15px; margin: 20px 15px; padding: 15px; max-height: 62vh; overflow-y: auto; }
-.colunas-titulo { display: grid; grid-template-columns: 2fr 2fr 1fr 1fr; font-size: 0.9rem; color: var(--texto-escuro); border-bottom: 1px solid rgba(0,0,0,0.1); padding-bottom: 8px; margin-bottom: 10px; }
-.item { display: grid; grid-template-columns: 2fr 2fr 1fr 1fr; align-items: center; font-size: 1rem; color: var(--texto-escuro); margin-bottom: 5px; padding: 8px 10px; border-radius: 10px; transition: background-color 0.3s ease; }
+
+body { 
+    font-family: Arial, sans-serif; 
+    background-color: var(--bg-bege); 
+    margin: 0; 
+    padding: 0; 
+    display: flex; 
+    justify-content: center; 
+}
+
+.app-container { 
+    width: 100%; 
+    max-width: 400px; 
+    height: 100vh; 
+    position: relative; 
+    background-color: var(--bg-bege); 
+    padding-top: 15px; 
+    overflow: hidden; 
+    box-sizing: border-box;
+}
+
+.header { 
+    background-color: var(--header-cinza); 
+    border-radius: 12px; 
+    margin: 0 15px; 
+    padding: 10px 15px; 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    font-size: 1.3rem; 
+    color: var(--texto-escuro); 
+    font-weight: 500; 
+}
+
+.card { 
+    background-color: var(--card-azul-cinza); 
+    border-radius: 15px; 
+    margin: 20px 15px; 
+    padding: 15px; 
+    max-height: 62vh; 
+    overflow-y: auto; 
+}
+
+.colunas-titulo { 
+    display: grid; 
+    grid-template-columns: 2fr 2fr 1fr 1fr; 
+    font-size: 0.9rem; 
+    color: var(--texto-escuro); 
+    border-bottom: 1px solid rgba(0,0,0,0.1); 
+    padding-bottom: 8px; 
+    margin-bottom: 10px; 
+}
+
+.item { 
+    display: grid; 
+    grid-template-columns: 2fr 2fr 1fr 1fr; 
+    align-items: center; 
+    font-size: 1rem; 
+    color: var(--texto-escuro); 
+    margin-bottom: 5px; 
+    padding: 8px 10px; 
+    border-radius: 10px; 
+    transition: background-color 0.3s ease; 
+}
+
 .linha-verde { background-color: var(--verde-suave); }
 .linha-selecionada { background-color: #a4b2be !important; border: 1px dashed var(--texto-escuro); }
-.btn-status { width: 24px; height: 24px; border-radius: 50%; border: 2px solid var(--texto-escuro); background-color: transparent; cursor: pointer; display: flex; justify-content: center; align-items: center; margin-left: auto; transition: all 0.2s ease; }
+
+.btn-status { 
+    width: 24px; 
+    height: 24px; 
+    border-radius: 50%; 
+    border: 2px solid var(--texto-escuro); 
+    background-color: transparent; 
+    cursor: pointer; 
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+    margin-left: auto; 
+    transition: all 0.2s ease; 
+}
+
 .pago { background-color: var(--verde-forte); border-color: var(--verde-forte); color: white; }
 .pago::after { content: '✔'; font-size: 14px; font-weight: bold; }
+
 .checkbox-selecao { width: 20px; height: 20px; cursor: pointer; margin-left: auto; }
 .btn-editar { background: none; border: none; cursor: pointer; font-size: 16px; margin-left: auto; }
-.footer-inferior { position: absolute; bottom: 25px; left: 15px; right: 15px; display: flex; justify-content: space-between; align-items: center; z-index: 5; }
-.visor-total { background-color: var(--card-azul-cinza); border: 2px solid var(--texto-escuro); border-radius: 12px; padding: 10px 15px; flex-grow: 1; margin-right: 15px; display: flex; flex-direction: column; }
+
+.footer-inferior { 
+    position: absolute; 
+    bottom: 25px; 
+    left: 15px; 
+    right: 15px; 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    z-index: 5; 
+}
+
+.visor-total { 
+    background-color: var(--card-azul-cinza); 
+    border: 2px solid var(--texto-escuro); 
+    border-radius: 12px; 
+    padding: 10px 15px; 
+    flex-grow: 1; 
+    margin-right: 15px; 
+    display: flex; 
+    flex-direction: column; 
+}
+
 .visor-label { font-size: 0.75rem; color: var(--texto-escuro); font-weight: bold; text-transform: uppercase; }
 .visor-valor { font-size: 1.2rem; color: var(--texto-escuro); font-weight: bold; }
-.btn-acao-principal { width: 50px; height: 50px; border-radius: 50%; border: 3px solid var(--texto-escuro); background-color: transparent; font-size: 26px; font-weight: bold; display: flex; justify-content: center; align-items: center; cursor: pointer; color: var(--texto-escuro); flex-shrink: 0; transition: background-color 0.2s; }
-.modo-lixeira { background-color: var(--vermelho-lixeira) !important; color: white !important; }
-.modal { display: flex; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.6); justify-content: center; align-items: center; z-index: 10; opacity: 0; visibility: hidden; transition: opacity 0.3s ease, visibility 0.3s ease; }
+
+.btn-acao-principal { 
+    width: 50px; 
+    height: 50px; 
+    border-radius: 50%; 
+    border: 3px solid var(--texto-escuro); 
+    background-color: transparent; 
+    font-size: 26px; 
+    font-weight: bold; 
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+    cursor: pointer; 
+    color: var(--texto-escuro); 
+    flex-shrink: 0; 
+    transition: background-color 0.2s; 
+}
+
+.modo-excluir, .modo-lixeira { 
+    background-color: var(--vermelho-lixeira) !important; 
+    color: white !important; 
+}
+
+.modal { 
+    display: flex; 
+    position: absolute; 
+    top: 0; 
+    left: 0; 
+    width: 100%; 
+    height: 100%; 
+    background-color: rgba(0,0,0,0.6); 
+    justify-content: center; 
+    align-items: center; 
+    z-index: 10; 
+    opacity: 0; 
+    visibility: hidden; 
+    transition: opacity 0.3s ease, visibility 0.3s ease; 
+}
+
 .modal.ativo { opacity: 1; visibility: visible; }
-.modal-conteudo { background-color: var(--bg-bege); padding: 25px; border-radius: 15px; width: 75%; text-align: center; position: relative; transform: translateY(20px); transition: transform 0.3s ease; }
+
+.modal-conteudo { 
+    background-color: var(--bg-bege); 
+    padding: 25px; 
+    border-radius: 15px; 
+    width: 75%; 
+    text-align: center; 
+    position: relative; 
+    transform: translateY(20px); 
+    transition: transform 0.3s ease; 
+}
+
 .modal.ativo .modal-conteudo { transform: translateY(0); }
+
 .btn-fechar { position: absolute; top: 10px; right: 15px; background: none; border: none; font-size: 20px; font-weight: bold; cursor: pointer; color: var(--texto-escuro); }
 .btn-opcao { display: block; width: 100%; padding: 15px; margin: 15px 0 5px 0; border: 2px solid var(--texto-escuro); border-radius: 10px; background-color: var(--card-azul-cinza); font-size: 16px; font-weight: bold; cursor: pointer; color: var(--texto-escuro); }
+
 .form-group { text-align: left; margin-bottom: 12px; }
 .form-group label { display: block; font-size: 14px; font-weight: bold; margin-bottom: 4px; }
 .form-group input { width: 100%; padding: 10px; border: 2px solid var(--texto-escuro); border-radius: 8px; background-color: var(--card-azul-cinza); font-size: 16px; box-sizing: border-box; }
+
 #modal-loading { background-color: rgba(0, 0, 0, 0.7); z-index: 99999; }
 .loading-caixa { background-color: var(--bg-bege); padding: 30px; border-radius: 15px; border: 2px solid var(--texto-escuro); text-align: center; display: flex; flex-direction: column; align-items: center; }
 .spinner { width: 45px; height: 45px; border: 5px solid var(--header-cinza); border-top: 5px solid var(--texto-escuro); border-radius: 50%; animation: girar 0.8s linear infinite; margin-bottom: 15px; }
 .loading-texto { font-size: 1.1rem; font-weight: bold; color: var(--texto-escuro); }
+
 @keyframes girar { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
 /* Esconde as setinhas de número em inputs (parcelas) */
@@ -79,16 +232,14 @@ input[type=number]::-webkit-outer-spin-button {
 
 .animacao-transicao { animation: surgirSuave 0.2s ease-out; }
 @keyframes surgirSuave { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
-/* A caixa de prévia fica oculta por defeito (versão mobile) */
-.visor-previa {
-    display: none; 
-}
+
+.visor-previa { display: none; }
 
 /* --- ADAPTAÇÃO PARA COMPUTADORES (Com Prévia do Mês Seguinte) --- */
 @media (min-width: 768px) {
     .app-container {
         display: grid;
-        grid-template-columns: 2.8fr 1.1fr; /* Dá um pouco mais de largura à coluna da direita */
+        grid-template-columns: 2.8fr 1.1fr;
         grid-template-rows: auto 1fr;
         gap: 20px;
         max-width: 1150px;
@@ -126,7 +277,7 @@ input[type=number]::-webkit-outer-spin-button {
         bottom: auto; left: auto; right: auto;
         display: flex;
         flex-direction: column;
-        justify-content: space-between; /* Distribui os blocos perfeitamente na vertical */
+        justify-content: space-between;
         gap: 15px;
         padding: 0;
         z-index: 5;
@@ -155,7 +306,7 @@ input[type=number]::-webkit-outer-spin-button {
         margin-top: 3px;
     }
 
-/* 5. Caixa de Prévia configurada como Flexbox vertical total */
+    /* Caixa de Prévia configurada como Flexbox vertical total */
     .visor-previa {
         display: flex;
         flex-direction: column;
@@ -169,12 +320,23 @@ input[type=number]::-webkit-outer-spin-button {
         justify-content: space-between;
     }
 
-.visor-previa .visor-label {
+    .visor-previa .visor-label {
         font-size: 0.85rem;
         text-transform: lowercase;
         font-weight: bold;
         color: var(--texto-escuro);
-        flex-shrink: 0; /* Impede que o título encolha */
+        flex-shrink: 0;
+    }
+
+    /* Lista da Prévia */
+    #lista-previa-proximo-mes {
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+        overflow-y: auto;
+        max-height: none !important;
+        margin: 5px 0;
+        padding-right: 4px;
     }
 
     /* Botão Adicionar Dívida */
@@ -190,7 +352,8 @@ input[type=number]::-webkit-outer-spin-button {
         justify-content: center;
         align-items: center;
         gap: 12px;
-        font-size: 0;
+        font-size: 1rem;
+        font-weight: bold;
         cursor: pointer;
         box-shadow: 0 4px 15px rgba(0,0,0,0.05);
         transition: transform 0.15s ease, background-color 0.15s ease;
@@ -200,67 +363,39 @@ input[type=number]::-webkit-outer-spin-button {
         transform: translateY(-2px);
     }
 
-    .btn-acao-principal::before {
-        content: "+";
-        font-size: 22px;
-        font-weight: bold;
-        color: var(--texto-escuro);
-        width: 28px;
-        height: 28px;
-        border: 2px solid var(--texto-escuro);
-        border-radius: 50%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        padding-bottom: 2px;
+    /* Remove o contéudo gerado por CSS quando o JS alterar o botão */
+    .btn-acao-principal.modo-excluir::before,
+    .btn-acao-principal.modo-excluir::after {
+        display: none !important;
     }
 
-    .btn-acao-principal::after {
-        content: "adicionar dívida";
-        font-size: 1rem;
-        font-weight: bold;
-        color: var(--texto-escuro);
-    }
-    /* Limita o tamanho da janela de adicionar/editar dívida para ficar compacta no PC */
     .modal-conteudo {
         width: 90%;
-        max-width: 420px; /* Mantém o tamanho compacto igual ao mobile */
+        max-width: 420px;
         padding: 25px;
         border-radius: 20px;
     }
 }
-/* Força a lista a crescer e ocupar todo o espaço roxo do meio */
-    #lista-previa-proximo-mes {
-        display: flex;
-        flex-direction: column;
-        flex-grow: 1; /* Ocupa todo o espaço livre entre o título e o total */
-        overflow-y: auto;
-        max-height: none !important;
-        margin: 5px 0;
-        padding-right: 4px;
-    }
-    /* --- BARRA DE ROLAGEM MODERNA E PERSONALIZADA --- */
 
-/* Para navegadores baseados em Chromium (Chrome, Edge, Brave, Opera) */
+/* --- BARRA DE ROLAGEM PERSONALIZADA --- */
 ::-webkit-scrollbar {
-    width: 6px;  /* Largura bem fina */
+    width: 6px; 
     height: 6px;
 }
 
 ::-webkit-scrollbar-track {
-    background: transparent; /* Fundo transparente para integrar com o cartão */
+    background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
-    background-color: rgba(0, 0, 0, 0.2); /* Tom escuro suave com transparência */
-    border-radius: 10px; /* Extremidades totalmente arredondadas */
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background-color: rgba(0, 0, 0, 0.35); /* Fica um pouco mais visível ao passar o rato */
+    background-color: rgba(0, 0, 0, 0.35);
 }
 
-/* Para Firefox */
 * {
     scrollbar-width: thin;
     scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
