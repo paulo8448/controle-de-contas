@@ -48,7 +48,7 @@
     </div>
 
     <script>
-        function tratarLoginGoogle(response) {
+function tratarLoginGoogle(response) {
             const base64Url = response.credential.split('.')[1];
             const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
             const dadosUsuario = JSON.parse(decodeURIComponent(window.atob(base64).split('').map(function(c) {
@@ -57,11 +57,11 @@
 
             const email = dadosUsuario.email;
 
-            // MUDAR AQUI: Coloque o seu e-mail do Google
             if (email === "paulo8448@gmail.com") {
-                // Salva uma "chave" no navegador indicando que está logado
                 localStorage.setItem("autenticado", "true");
-                // Redireciona para o painel principal
+                localStorage.setItem("usuario_nome", dadosUsuario.name);
+                localStorage.setItem("usuario_foto", dadosUsuario.picture);
+                
                 window.location.href = "index.html";
             } else {
                 document.getElementById('msg-erro').style.display = 'block';
